@@ -83,15 +83,8 @@ hist(
 )
 
 # Calculate and report the mean and median total number of steps taken per day
-plot(d_agg_perday$date, d_agg_perday$mean_steps)
-
-# Median values are all 0's and plotting them is not informative. Add a check for all of them to be 0 and if they are
-# just print the message. If they are not all 0's, plot them similarly to means
-if( !all(d_agg_perday$median == 0) ) {
-    plot(d_agg_perday$date, d_agg_perday$median_steps)
-} else {
-    cat('Median number of steps per day is 0 for every day from the provided dataset. How boring!', "\n");
-}
+cat('Summary for the total number of steps taken per day:', "\n");
+cat(paste0('Mean = ', mean(d_agg_perday$sum_steps), ', median = ', median(d_agg_perday$sum_steps), "\n"));
 
 ########################################################################################################################
 # PROBLEM: What is the average daily activity pattern?
@@ -118,9 +111,9 @@ d_agg_perintl <- d.no_na_dates %>%
 # Since the number of datapoints per day and interval is the same (only full days were removed during cleaning, so these
 # numbers are intact), the order on sum and mean is the same (mean = sum/n and n's are all equal)
 ind_intl_max_sum <- which.max(d_agg_perintl$sum_steps)
-cat('Interval with the maximum number of steps (on average across all days in the dataset):',
+cat(paste0('Interval with the maximum number of steps (on average across all days in the dataset): ',
     d_agg_perintl$interval[ind_intl_max_sum], 
-    '. Its mean number of steps is ', d_agg_perintl$mean_steps[ind_intl_max_sum], "\n");
+    '. Its mean number of steps is ', round(d_agg_perintl$mean_steps[ind_intl_max_sum], 2), "\n"));
 
 ########################################################################################################################
 # PROBLEM: Imputing missing values
@@ -153,7 +146,7 @@ if( cnt_incomplete_entries > 0 ) {
 }
 
 # Impute the values for the missing days
-# TODO:
+# TODO: better imputation strategy
 d.imputed <- d;
 d.imputed$steps[d.imputed$date %in% na_dates$date] <- 0
 
@@ -180,13 +173,7 @@ hist(
 )
 
 # Calculate and report the mean and median total number of steps taken per day
-plot(d_agg_perday$date, d_agg_perday$mean_steps)
+cat('Summary for the total number of steps taken per day:', "\n");
+cat(paste0('Mean = ', mean(d_agg_perday$sum_steps), ', median = ', median(d_agg_perday$sum_steps), "\n"));
 
-# Median values are all 0's and plotting them is not informative. Add a check for all of them to be 0 and if they are
-# just print the message. If they are not all 0's, plot them similarly to means
-if( !all(d_agg_perday$median == 0) ) {
-    plot(d_agg_perday$date, d_agg_perday$median_steps)
-} else {
-    cat('Median number of steps per day is 0 for every day from the provided dataset. How boring!', "\n");
-}
 
