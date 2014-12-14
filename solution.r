@@ -176,4 +176,48 @@ hist(
 cat('Summary for the total number of steps taken per day:', "\n");
 cat(paste0('Mean = ', mean(d_agg_perday$sum_steps), ', median = ', median(d_agg_perday$sum_steps), "\n"));
 
+########################################################################################################################
+# PROBLEM: Are there differences in activity patterns between weekdays and weekends?
+# 
+# For this part the weekdays() function may be of some help here. Use the dataset with the filled-in missing values for
+# this part.
+# 
+# 1. Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given
+# date is a weekday or weekend day.
+# 
+# 2. Make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average
+# number of steps taken, averaged across all weekday days or weekend days (y-axis). The plot should look something like
+# the following, which was created using simulated data:
+########################################################################################################################
+# SOLUTION
+# Similar to previous only aggregation is performed per 5-minute interval, not per day
+########################################################################################################################
 
+# Use lubridate for operations with dates
+library(lubridate)
+
+# wday returns the day of the week as decimal. 
+#   (Sun = 1, Sat = 7) => weekend
+#   (everything else) => weekday
+d.imputed %<>% mutate(
+    week_period = as.factor(ifelse(wday(ymd(date)) %in% c(1,7), 'weekend', 'weekday'))
+);
+
+# Note: assume no NAs in imputed data
+d_agg_per_weekperiod_intl <- d.imputed %>% 
+    group_by(week_period, interval) %>% 
+    summarize(
+        sum_steps = sum(steps)
+        ,mean_steps = mean(steps)
+        ,median_steps = median(steps)
+        ,cnt_datapoints = n()
+    )
+
+p <- ggplot(d_agg_per_weekperiod_intl, aes(interval, mean_steps)) + 
+    geom_line(colour = 'blue') +
+    facet_grid(week_period ~ .) +
+    ggtitle('Average number of steps taken per time interval') + 
+    xlab('Time interval') +
+    ylab('Average number of steps taken')
+
+print(p)
