@@ -47,7 +47,6 @@ d_agg_perday <- d %>%
 na_dates <- d_agg_perday %>% filter(any_steps_not_NA == FALSE) %>% select(date)
 d.no_na_dates <- filter(d, !(date %in% na_dates$date))
 
-
 ########################################################################################################################
 # PROBLEM: What is mean total number of steps taken per day?
 # For this part of the assignment, you can ignore the missing values in the dataset.
@@ -148,7 +147,13 @@ if( cnt_incomplete_entries > 0 ) {
 # Impute the values for the missing days
 # TODO: better imputation strategy
 d.imputed <- d;
-d.imputed$steps[d.imputed$date %in% na_dates$date] <- 0
+# d.imputed$steps[d.imputed$date %in% na_dates$date] <- 0
+
+for(i in seq_along(d.imputed$steps)){
+    if(is.na(d.imputed$steps[i])) {
+        d.imputed$steps[i] <- d_agg_perintl$median_steps[d_agg_perintl$interval == d.imputed$interval[i]];
+    }
+}
 
 # Aggregate the data NOT ignoring the NAs (there should be none)
 d_agg_perday <- d.imputed %>% 
