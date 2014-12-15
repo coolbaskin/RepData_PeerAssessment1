@@ -33,7 +33,7 @@ d <- read.csv(data_file_path);
 ########################################################################################################################
 # Clean the data
 ########################################################################################################################
-# Lets completely exclude the dates for which there only datapoints with NAs are available. 
+# Let's completely exclude the dates for which there only datapoints with NAs are available. 
 # There is too little information (none!) available for them to make any meaningful imputations
 library(dplyr)
 
@@ -89,7 +89,7 @@ cat(paste0('Mean = ', mean(d_agg_perday$sum_steps), ', median = ', median(d_agg_
 # PROBLEM: What is the average daily activity pattern?
 #   1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps
 #   taken, averaged across all days (y-axis)
-#   2 . Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+#   2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 ########################################################################################################################
 # SOLUTION
 # Similar to previous only aggregation is performed per 5-minute interval, not per day
